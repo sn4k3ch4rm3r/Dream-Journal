@@ -1,5 +1,6 @@
+import 'dart:ffi';
+
 import 'package:dream_journal/models/dream.dart';
-import 'package:dream_journal/ui/dream_list.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -61,5 +62,14 @@ class DatabaseProvider {
     final db = await database;
     dream.id = await db.insert(TABLE_DREAM, dream.toMap());
     return dream;
+  }
+  
+  Future<void> update(Dream dream) async {
+    final db = await database;
+    db.update(TABLE_DREAM, dream.toMap(), where: '$COLUMN_ID = ?', whereArgs: [dream.id]);
+  }
+  Future<void> delete(Dream dream) async {
+    final db = await database;
+    db.delete(TABLE_DREAM, where: '$COLUMN_ID = ?', whereArgs: [dream.id]);
   }
 }

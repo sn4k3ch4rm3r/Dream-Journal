@@ -3,7 +3,7 @@ import 'package:dream_journal/models/dream.dart';
 import 'package:dream_journal/ui/ui_elements.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'add_dream.dart';
+import 'dream_view.dart';
 
 class DreamList extends StatefulWidget {
   const DreamList({Key key}) : super(key: key);
@@ -27,7 +27,7 @@ class _DreamListState extends State<DreamList> {
         onPressed: () async {
           var result = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddDream()),
+            MaterialPageRoute(builder: (context) => DreamView()),
           );
           if(result == 'success') {
             setState(() {});
@@ -90,6 +90,15 @@ class _DreamListBodyState extends State<DreamListBody> {
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
         ),
+        onTap: () async{
+          var result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => DreamView(dream: dream, edit:false)),
+          );
+          if(result == 'edited' || result == 'deleted') {
+            setState(() {});
+          }
+        },
       ),
     );
   }
@@ -116,7 +125,7 @@ class _DreamListBodyState extends State<DreamListBody> {
         if(snapshot.hasData)
           return snapshot.data;
         else {
-          return Text('Loading');
+          return Center(child: Text('Loading...'));
         }
       },
     );

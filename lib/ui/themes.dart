@@ -26,7 +26,18 @@ class Themes {
         activeTrackColor: Colors.teal,
         inactiveTrackColor: Colors.blueGrey[900],
         thumbColor: Colors.teal,
-      )
+      ),
+      dialogTheme: DialogTheme(
+        titleTextStyle: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
+        contentTextStyle: TextStyle(
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.grey[800],
+      ),
     );
   }
 }
