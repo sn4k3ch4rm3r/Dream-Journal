@@ -1,11 +1,18 @@
+import 'package:dream_journal/data/database_provider.dart';
+import 'package:dream_journal/models/dream.dart';
 import 'package:dream_journal/ui/ui_elements.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import 'add_dream.dart';
 
-class DreamList extends StatelessWidget {
+class DreamList extends StatefulWidget {
   const DreamList({Key key}) : super(key: key);
 
+  @override
+  _DreamListState createState() => _DreamListState();
+}
+
+class _DreamListState extends State<DreamList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,11 +24,14 @@ class DreamList extends StatelessWidget {
         child: Icon(
           Icons.add,
         ),
-        onPressed: () => {
-          Navigator.push(
+        onPressed: () async {
+          var result = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddDream()),
-          )
+          );
+          if(result == 'success') {
+            setState(() {});
+          }
         },
       ),
       bottomNavigationBar: UiElements.bottomNavigator(
@@ -40,125 +50,75 @@ class DreamListBody extends StatefulWidget {
 }
 
 class _DreamListBodyState extends State<DreamListBody> {
+  Future<Widget> getDreams() async {
+    List<Dream> dreams = await DatabaseProvider.db.getDreams();
+    List<Widget> listElements = List<Widget>();
+    if(dreams.length > 0) {
+      dreams.sort((a, b) => a.date.millisecondsSinceEpoch.compareTo(b.date.millisecondsSinceEpoch));
+      dreams = dreams.reversed.toList();
+      DateTime prevDate = dreams.first.date;
+      listElements.add(listViewMonth(prevDate));
+      dreams.forEach((dream) {
+        if(dream.date.month != prevDate.month || dream.date.year != prevDate.year){
+          prevDate = dream.date;
+          listElements.add(listViewMonth(prevDate));
+        }
+        listElements.add(listViewDream(dream));
+      });
+      return ListView(
+        children:listElements
+      );
+    }
+    else {
+      return Center(
+        child: Text('You have not saved any dreams yet.'),
+      );
+    }
+  }
+
+  Container listViewDream(Dream dream) {
+    return Container(
+      height: 55,
+      child: ListTile(
+        leading: Text(
+          '${dream.date.day}',
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        title: Text(
+          dream.dream,
+          style: Theme.of(context).textTheme.bodyText2,
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    );
+  }
+
+  Ink listViewMonth(DateTime date) {
+    DateFormat dateFormat = DateFormat('MMMM yyyy');
+    return Ink(
+      color: Theme.of(context).accentColor,
+      child: ListTile(
+        dense: true,
+        title: Text(
+          '${dateFormat.format(date)}',
+          style: Theme.of(context).textTheme.headline6,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget> [
-        ListView(
-          children: <Widget>[
-            Ink(
-              color: Theme.of(context).accentColor,
-              child: ListTile(
-                dense: true,
-                title: Text(
-                  'July 2020',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-              ),
-            ),
-            Container(
-              height: 55,
-              child: ListTile(
-                leading: Text(
-                  '26',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                title: Text(
-                  'Dream text will appear here akkasdfk alsdkfja éalskdjf dals alsdéf  adslkf daslf éasdlfk asdlf dasl fédsa léd aésdfk jjfkdal alsdkfj asdfk asdéf dkfj alsdfé dkfj dkalsédf jadf aésdlkfj',
-                  style: Theme.of(context).textTheme.bodyText2,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            Container(
-              height: 55,
-              child: ListTile(
-                leading: Text(
-                  '26',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                title: Text(
-                  'Dream text will appear here akkasdfk dfk asdéf dkfj alsdfé dkfj dkalsédf jadf aésdlkfj',
-                  style: Theme.of(context).textTheme.bodyText2,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            Container(
-              height: 55,
-              child: ListTile(
-                leading: Text(
-                  '26',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                title: Text(
-                  'Dream text will appear here ',
-                  style: Theme.of(context).textTheme.bodyText2,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            Ink(
-              color: Theme.of(context).accentColor,
-              child: ListTile(
-                dense: true,
-                title: Text(
-                  'June 2020',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-              ),
-            ),
-            Container(
-              height: 55,
-              child: ListTile(
-                leading: Text(
-                  '26',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                title: Text(
-                  'Dream text will appear here akkasdfk alsdkfja éalskdjf dals alsdéf  adslkf daslf éasdlfk asdlf dasl fédsa léd aésdfk jjfkdal alsdkfj asdfk asdéf dkfj alsdfé dkfj dkalsédf jadf aésdlkfj',
-                  style: Theme.of(context).textTheme.bodyText2,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            Container(
-              height: 55,
-              child: ListTile(
-                leading: Text(
-                  '26',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                title: Text(
-                  'Dream text will appear here akkasdfk dfk asdéf dkfj alsdfé dkfj dkalsédf jadf aésdlkfj',
-                  style: Theme.of(context).textTheme.bodyText2,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            Container(
-              height: 55,
-              child: ListTile(
-                leading: Text(
-                  '26',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                title: Text(
-                  'Dream text will appear here ',
-                  style: Theme.of(context).textTheme.bodyText2,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
+    return FutureBuilder(
+      future: getDreams(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if(snapshot.hasData)
+          return snapshot.data;
+        else {
+          return Text('Loading');
+        }
+      },
     );
   }
 }
