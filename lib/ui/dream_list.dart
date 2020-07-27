@@ -27,7 +27,7 @@ class _DreamListState extends State<DreamList> {
         onPressed: () async {
           var result = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => DreamView()),
+            MaterialPageRoute(builder: (context) => DreamView(isNew: true)),
           );
           if(result == 'success') {
             setState(() {});
