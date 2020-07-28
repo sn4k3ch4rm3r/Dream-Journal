@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 class Themes {
   static ThemeData darkTeal() {
     return ThemeData(
+      colorScheme: ColorScheme.dark(
+        primary: Colors.teal,
+      ),
       primaryColor: Colors.blueGrey[900],
       primaryColorLight: Colors.blueGrey,
       accentColor: Colors.teal,
@@ -38,6 +41,10 @@ class Themes {
         ),
         backgroundColor: Colors.grey[800],
       ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.teal,
+      )
     );
   }
 }
