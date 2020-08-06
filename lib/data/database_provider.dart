@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:dream_journal/models/dream.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -17,6 +15,18 @@ class DatabaseProvider {
 
   Database _database;
 
+  Future<void> _onCreate(Database db) async {
+    await db.execute(
+      'CREATE TABLE $TABLE_DREAM ('
+        '$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$COLUMN_DATE TEXT,'
+        '$COLUMN_DREAM TEXT,'
+        '$COLUMN_ISLUCID INTEGER,'
+        '$COLUMN_VIVIDITY INTEGER'
+      ');'
+    );
+  }
+
   Future<Database> get database async {
     if(_database != null)
       return _database;
@@ -25,22 +35,19 @@ class DatabaseProvider {
       return _database;
     }
   }
+
   Future<Database> createDatabase() async {
     String dbPath = await getDatabasesPath();
 
     return await openDatabase(
       join(dbPath, 'dreams.db'),
       version: 1,
-      onCreate: (database, version) async {
-        await database.execute(
-          'CREATE TABLE $TABLE_DREAM ('
-            '$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,'
-            '$COLUMN_DATE TEXT,'
-            '$COLUMN_DREAM TEXT,'
-            '$COLUMN_ISLUCID INTEGER,'
-            '$COLUMN_VIVIDITY INTEGER'
-          ');'
-        );
+      onCreate: (db, version) async {
+        await _onCreate(db);
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        await db.execute('DROP TABLE $TABLE_DREAM');
+        await _onCreate(db);
       },
     );
   }
@@ -68,6 +75,7 @@ class DatabaseProvider {
     final db = await database;
     db.update(TABLE_DREAM, dream.toMap(), where: '$COLUMN_ID = ?', whereArgs: [dream.id]);
   }
+
   Future<void> delete(Dream dream) async {
     final db = await database;
     db.delete(TABLE_DREAM, where: '$COLUMN_ID = ?', whereArgs: [dream.id]);
