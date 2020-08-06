@@ -34,10 +34,10 @@ class _DreamListState extends State<DreamList> {
           }
         },
       ),
-      bottomNavigationBar: UiElements.bottomNavigator(
-        context,
-        selected: 0
-      ),
+      // bottomNavigationBar: UiElements.bottomNavigator(
+      //   context,
+      //   selected: 0
+      // ),
     );
   }
 }
