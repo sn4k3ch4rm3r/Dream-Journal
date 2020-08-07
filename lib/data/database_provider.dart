@@ -8,7 +8,12 @@ class DatabaseProvider {
   static const String COLUMN_DATE = 'date';
   static const String COLUMN_DREAM = 'content';
   static const String COLUMN_ISLUCID = 'lucid';
+  static const String COLUMN_ISNIGHTMARE = 'nightmare';
+  static const String COLUMN_ISRECURRENT = 'recurrent';
+  static const String COLUMN_SLEEPPARALYSIS = 'sleepparalysis';
+  static const String COLUMN_FALSEAWAKENING = 'falseawakening';
   static const String COLUMN_VIVIDITY = 'vividity';
+  static const String COLUMN_LUCIDITY = 'lucidity';
 
   DatabaseProvider._();
   static final DatabaseProvider db = DatabaseProvider._();
@@ -22,7 +27,12 @@ class DatabaseProvider {
         '$COLUMN_DATE TEXT,'
         '$COLUMN_DREAM TEXT,'
         '$COLUMN_ISLUCID INTEGER,'
-        '$COLUMN_VIVIDITY INTEGER'
+        '$COLUMN_ISNIGHTMARE INTEGER,'
+        '$COLUMN_ISRECURRENT INTEGER,'
+        '$COLUMN_SLEEPPARALYSIS INTEGER,'
+        '$COLUMN_FALSEAWAKENING INTEGER,'
+        '$COLUMN_VIVIDITY INTEGER,'
+        '$COLUMN_LUCIDITY INTEGER'
       ');'
     );
   }
@@ -41,7 +51,7 @@ class DatabaseProvider {
 
     return await openDatabase(
       join(dbPath, 'dreams.db'),
-      version: 1,
+      version: 2,
       onCreate: (db, version) async {
         await _onCreate(db);
       },
