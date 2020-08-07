@@ -28,7 +28,7 @@ class Themes {
       sliderTheme: SliderThemeData(
         activeTrackColor: Colors.teal,
         inactiveTrackColor: Colors.blueGrey[900],
-        thumbColor: Colors.teal,
+        thumbColor: Colors.tealAccent,
       ),
       dialogTheme: DialogTheme(
         titleTextStyle: TextStyle(
