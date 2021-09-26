@@ -106,7 +106,17 @@ class _DreamViewState extends State<DreamView> {
                 },
               ),
             ]
-            : null,
+            : <Widget>[
+              IconButton(
+                icon: Icon(Icons.check),
+                onPressed: (){
+                  if(widget.isNew)
+                    saveDream();
+                  else
+                    updateDream();
+                },
+              ),
+            ],
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -254,7 +264,6 @@ class _DreamViewState extends State<DreamView> {
                   ],
                 ),
                 getLucidSlider(),
-                getSaveButton(),
               ],
             ),
           ),
@@ -292,23 +301,6 @@ class _DreamViewState extends State<DreamView> {
             ),
           ),
         ],
-      );
-    }
-    else {
-      return Container();
-    }
-  }
-
-  Widget getSaveButton() {
-    if(dream == null || widget.edit){
-      return RaisedButton(
-        onPressed: (){
-          if(widget.isNew)
-            saveDream();
-          else
-            updateDream();
-        },
-        child: Text('Save'),
       );
     }
     else {
