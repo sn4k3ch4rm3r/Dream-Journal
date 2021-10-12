@@ -12,7 +12,9 @@ class DreamJournal extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Dream Journal',
-      theme: Themes.darkTeal(),
+      theme: Themes.lightTheme,
+      darkTheme: Themes.darkTheme,
+      themeMode: ThemeMode.system,
       home: DreamList(),
     );
   }

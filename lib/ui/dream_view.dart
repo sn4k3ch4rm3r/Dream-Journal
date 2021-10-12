@@ -123,7 +123,7 @@ class _DreamViewState extends State<DreamView> {
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal:16.0),
             child: Column(
               children: <Widget>[
-                RaisedButton(
+                ElevatedButton(
                   onPressed:() {
                     if(widget.edit) 
                       showDatePicker(
@@ -142,6 +142,15 @@ class _DreamViewState extends State<DreamView> {
                     '${dateFormat.format(dream.date)}',
                     style: Theme.of(context).textTheme.headline6,
                   ),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))
+                    ),
+                    padding: MaterialStateProperty.all(EdgeInsets.fromLTRB(20, 10, 20, 10)),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 TextField(
                   controller: _controller,
@@ -151,14 +160,14 @@ class _DreamViewState extends State<DreamView> {
                   textInputAction: TextInputAction.done,
                   style: Theme.of(context).textTheme.bodyText2,
                   decoration: InputDecoration(
-                    fillColor: Theme.of(context).primaryColorLight,
+                    fillColor: Theme.of(context).colorScheme.surface,
                     filled: true,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0)
+                      borderRadius: BorderRadius.circular(15.0)
                     ),
                     hintText: 'Describe your dream in as much detail as you can'
                   ),
-                  cursorColor: Theme.of(context).accentColor,
+                  textCapitalization: TextCapitalization.sentences,
                 ),
                 Table(
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,

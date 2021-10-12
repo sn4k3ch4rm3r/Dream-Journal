@@ -9,19 +9,17 @@ class Dialogs {
           title: Text('Are sure you want to delete this dream?', ),
           content: Text('This action can\'t be undone!'),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.pop(context, false);
               },
               child: Text('CANCEL'),
-              textTheme: ButtonTextTheme.accent,
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.pop(context, true);
               },
               child: Text('DELETE'),
-              textTheme: ButtonTextTheme.accent,
             ),
           ],
         );

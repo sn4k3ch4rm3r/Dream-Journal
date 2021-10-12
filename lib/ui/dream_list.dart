@@ -1,6 +1,5 @@
 import 'package:dream_journal/data/database_provider.dart';
 import 'package:dream_journal/models/dream.dart';
-import 'package:dream_journal/ui/ui_elements.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dream_view.dart';
@@ -21,6 +20,9 @@ class _DreamListState extends State<DreamList> {
       ),
       body: DreamListBody(),
       floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+        ),
         child: Icon(
           Icons.add,
         ),
@@ -52,7 +54,7 @@ class DreamListBody extends StatefulWidget {
 class _DreamListBodyState extends State<DreamListBody> {
   Future<Widget> getDreams() async {
     List<Dream> dreams = await DatabaseProvider.db.getDreams();
-    List<Widget> listElements = List<Widget>();
+    List<Widget> listElements = [];
     if(dreams.length > 0) {
       dreams.sort((a, b) => a.date.millisecondsSinceEpoch.compareTo(b.date.millisecondsSinceEpoch));
       dreams = dreams.reversed.toList();
@@ -78,10 +80,10 @@ class _DreamListBodyState extends State<DreamListBody> {
 
   Container listViewDream(Dream dream) {
     return Container(
-      height: 55,
+      height: 65,
       child: ListTile(
         leading: Text(
-          '${dream.date.day}',
+          '${dream.date.day.toString().padLeft(2, '0')}',
           style: Theme.of(context).textTheme.headline4,
         ),
         title: Text(
@@ -106,7 +108,7 @@ class _DreamListBodyState extends State<DreamListBody> {
   Ink listViewMonth(DateTime date) {
     DateFormat dateFormat = DateFormat('MMMM yyyy');
     return Ink(
-      color: Theme.of(context).accentColor,
+      color: Theme.of(context).colorScheme.secondary,
       child: ListTile(
         dense: true,
         title: Text(

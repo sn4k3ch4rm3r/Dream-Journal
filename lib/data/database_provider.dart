@@ -68,7 +68,7 @@ class DatabaseProvider {
       TABLE_DREAM
     );
 
-    List<Dream> dreamList = List<Dream>();
+    List<Dream> dreamList = [];
     dreams.forEach((dream) {
       dreamList.add(Dream.fromMap(dream));
     });

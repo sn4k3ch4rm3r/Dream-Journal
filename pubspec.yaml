@@ -1,5 +1,5 @@
 name: dream_journal
-description: A new Flutter project.
+description: A Dream Journal apllication.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.1.0+1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -23,6 +23,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  characters: ^1.0.0
+  sqflite: ^1.3.0
+  path: ^1.6.4
+  intl: ^0.16.0
+  google_fonts: ^2.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -32,10 +38,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  characters: ^1.0.0
-  sqflite: ^1.3.0
-  path: ^1.6.4
-  intl: ^0.16.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
