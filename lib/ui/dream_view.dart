@@ -154,7 +154,7 @@ class _DreamViewState extends State<DreamView> {
                 ),
                 TextField(
                   controller: _controller,
-                  enabled: widget.edit,
+                  readOnly: !widget.edit,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                   textInputAction: TextInputAction.done,
