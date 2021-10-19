@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
 
-class UiElements {
-  static BottomNavigationBar bottomNavigator(context, {int selected = 0}) {
-    return BottomNavigationBar(
-      items: <BottomNavigationBarItem> [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.brightness_3),
-          title: Text('Dreams')
+class StatisticsCard extends StatelessWidget {
+  final String name;
+  final num value;
+  StatisticsCard({this.name, this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              name,
+              style: TextStyle(
+                fontSize: 24
+              ),
+            ),
+            Text(
+              value.isNaN? '-': value.toString(),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
+            )
+          ],
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.equalizer),
-          title: Text('Analytics')
-        ),
-      ],
-      currentIndex: selected,
-      selectedItemColor: Theme.of(context).accentColor,
-      unselectedItemColor: Theme.of(context).textTheme.bodyText2.color,
+      ),
     );
   }
 }

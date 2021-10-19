@@ -1,4 +1,4 @@
-import 'package:dream_journal/ui/dream_list.dart';
+import 'package:dream_journal/ui/navigationview.dart';
 import 'package:dream_journal/ui/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +15,7 @@ class DreamJournal extends StatelessWidget {
       theme: Themes.lightTheme,
       darkTheme: Themes.darkTheme,
       themeMode: ThemeMode.system,
-      home: DreamList(),
+      home: NavigationView(),
     );
   }
 }

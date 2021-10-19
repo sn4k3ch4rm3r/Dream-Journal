@@ -7,6 +7,7 @@ class Themes {
     colorScheme: ColorScheme.dark(
       primary: Colors.lightBlue[800],
       secondary: Color.fromARGB(255, 0, 74, 119),
+      onSecondary: Color.fromARGB(255, 195, 231, 255),
     ),
     canvasColor: Colors.black,
     textTheme: GoogleFonts.openSansTextTheme(
@@ -33,8 +34,27 @@ class Themes {
         color: Colors.white,
       ),
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      foregroundColor: Color.fromARGB(255, 195, 231, 255),
+    navigationBarTheme: NavigationBarThemeData(
+      indicatorColor: Color.fromARGB(255, 0, 74, 119),
+      iconTheme: MaterialStateProperty.resolveWith((states) {
+        Color color;
+        if(states.contains(MaterialState.selected))
+          color = Color.fromARGB(255, 195, 231, 255);
+        else
+          color = Colors.grey;
+        return IconThemeData(color: color);
+      }),
+      height: 60,
+      labelTextStyle: MaterialStateProperty.resolveWith((states) {
+        FontWeight weight = FontWeight.w500;
+        if(states.contains(MaterialState.selected))
+          weight = FontWeight.w600;
+        return TextStyle(
+          fontSize: 14,
+          fontWeight: weight,
+        );
+      }),
+      backgroundColor: Color.fromARGB(255, 46, 47, 51),
     ),
     switchTheme: SwitchThemeData(
       thumbColor: MaterialStateProperty.resolveWith((states) {

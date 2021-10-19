@@ -36,10 +36,6 @@ class _DreamListState extends State<DreamList> {
           }
         },
       ),
-      // bottomNavigationBar: UiElements.bottomNavigator(
-      //   context,
-      //   selected: 0
-      // ),
     );
   }
 }
@@ -127,7 +123,7 @@ class _DreamListBodyState extends State<DreamListBody> {
         if(snapshot.hasData)
           return snapshot.data;
         else {
-          return Center(child: Text('Loading...'));
+          return Center(child: CircularProgressIndicator());
         }
       },
     );
