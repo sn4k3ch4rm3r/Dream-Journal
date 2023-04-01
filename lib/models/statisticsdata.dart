@@ -8,16 +8,14 @@ class StatisticsData {
   double vividityAvg;
   double lucidityAvg;
 
-  StatisticsData(
-    {
-      this.count,
-      this.lucidCount,
-      this.nightmareCount,
-      this.recurrentCount,
-      this.paralysisCount,
-      this.falseAwakeningCount,
-      this.vividityAvg,
-      this.lucidityAvg
-    }
-  );
+  StatisticsData({
+    required this.count,
+    required this.lucidCount,
+    required this.nightmareCount,
+    required this.recurrentCount,
+    required this.paralysisCount,
+    required this.falseAwakeningCount,
+    required this.vividityAvg,
+    required this.lucidityAvg,
+  });
 }

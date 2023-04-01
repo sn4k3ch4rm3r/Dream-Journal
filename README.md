@@ -1,4 +1,3 @@
-
 # Dream Journal
 A simple dream journal app.
 # Discord

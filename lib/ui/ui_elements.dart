@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class StatisticsCard extends StatelessWidget {
   final String name;
   final num value;
-  StatisticsCard({this.name, this.value});
+  const StatisticsCard({super.key, required this.name, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +16,14 @@ class StatisticsCard extends StatelessWidget {
           children: [
             Text(
               name,
-              style: TextStyle(
-                fontSize: 24
-              ),
+              style: const TextStyle(fontSize: 24),
             ),
             Text(
-              value.isNaN? '-': value.toString(),
+              value.isNaN ? '-' : value.toString(),
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w600,
-                color: Theme.of(context).colorScheme.onSecondary,
+                color: Theme.of(context).colorScheme.primary,
               ),
             )
           ],

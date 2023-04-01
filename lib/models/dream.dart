@@ -3,18 +3,29 @@ import 'package:intl/intl.dart';
 
 class Dream {
   static DateFormat dateFormat = DateFormat('yyyy-MM-dd');
-  int id;
-  String dream;
-  bool isNightmare;
-  bool isRecurrent;
-  bool sleepParalysisOccured;
-  bool falseAwakeningOccured;
-  bool isLucid;
-  int vividity;
-  int lucidity;
-  DateTime date;
+  late int? id;
+  late String? dream;
+  late bool isNightmare;
+  late bool isRecurrent;
+  late bool sleepParalysisOccured;
+  late bool falseAwakeningOccured;
+  late bool isLucid;
+  late int vividity;
+  late int lucidity;
+  late DateTime date;
 
-  Dream({this.id, this.dream, this.isNightmare, this.isRecurrent, this.sleepParalysisOccured, this.falseAwakeningOccured, this.isLucid, this.vividity, this.lucidity, this.date});
+  Dream({
+    this.id,
+    this.dream,
+    required this.isNightmare,
+    required this.isRecurrent,
+    required this.sleepParalysisOccured,
+    required this.falseAwakeningOccured,
+    required this.isLucid,
+    required this.vividity,
+    required this.lucidity,
+    required this.date,
+  });
 
   Map<String, dynamic> toMap() {
     String dateString = dateFormat.format(date);
@@ -29,7 +40,7 @@ class Dream {
       DatabaseProvider.COLUMN_LUCIDITY: lucidity,
       DatabaseProvider.COLUMN_DATE: dateString,
     };
-    if(id != null) {
+    if (id != null) {
       map[DatabaseProvider.COLUMN_ID] = id;
     }
 

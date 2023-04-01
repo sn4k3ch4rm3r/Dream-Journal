@@ -4,17 +4,17 @@ import 'analytics.dart';
 import 'dream_list.dart';
 
 class NavigationView extends StatefulWidget {
-  const NavigationView({ Key key }) : super(key: key);
+  const NavigationView({Key? key}) : super(key: key);
 
   @override
-  _NavigationViewState createState() => _NavigationViewState();
+  State<NavigationView> createState() => _NavigationViewState();
 }
 
 class _NavigationViewState extends State<NavigationView> {
   int selectedPage = 0;
   List<Widget> pages = [
-    DreamList(),
-    AnalyticsView(),
+    const DreamList(),
+    const AnalyticsView(),
   ];
 
   @override
@@ -23,9 +23,11 @@ class _NavigationViewState extends State<NavigationView> {
       body: pages[selectedPage],
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedPage,
-        animationDuration: Duration(milliseconds: 500),
-        onDestinationSelected: (index) => setState(() => selectedPage = index),
-        destinations: [
+        height: 65,
+        onDestinationSelected: (index) => setState(
+          () => selectedPage = index,
+        ),
+        destinations: const [
           NavigationDestination(
             icon: Icon(Icons.nights_stay_outlined),
             selectedIcon: Icon(Icons.nights_stay),
@@ -36,7 +38,7 @@ class _NavigationViewState extends State<NavigationView> {
             selectedIcon: Icon(Icons.insert_chart),
             label: 'Analytics',
           )
-        ]
+        ],
       ),
     );
   }
