@@ -11,22 +11,45 @@ class NavigationView extends StatefulWidget {
 }
 
 class _NavigationViewState extends State<NavigationView> {
-  int selectedPage = 0;
-  List<Widget> pages = [
-    const DreamList(),
-    const AnalyticsView(),
-  ];
+  late PageController _pageController;
+  int _selectedPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[selectedPage],
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) => setState(() => _selectedPage = index),
+        children: const [
+          DreamList(),
+          AnalyticsView(),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedPage,
+        selectedIndex: _selectedPage,
         height: 65,
-        onDestinationSelected: (index) => setState(
-          () => selectedPage = index,
-        ),
+        onDestinationSelected: (index) {
+          setState(
+            () => _selectedPage = index,
+          );
+          _pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+          );
+        },
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.nights_stay_outlined),
