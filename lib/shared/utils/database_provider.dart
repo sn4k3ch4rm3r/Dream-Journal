@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:dream_journal/models/dream.dart';
+import 'package:dream_journal/shared/models/dream.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

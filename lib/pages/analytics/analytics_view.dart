@@ -1,8 +1,8 @@
-import 'package:dream_journal/data/database_provider.dart';
-import 'package:dream_journal/models/statisticsdata.dart';
+import 'package:dream_journal/shared/utils/database_provider.dart';
+import 'package:dream_journal/shared/models/statisticsdata.dart';
 import 'package:flutter/material.dart';
-import 'package:dream_journal/models/dream.dart';
-import 'ui_elements.dart';
+import 'package:dream_journal/shared/models/dream.dart';
+import 'widgets/statistics_card.dart';
 
 class AnalyticsView extends StatefulWidget {
   const AnalyticsView({Key? key}) : super(key: key);

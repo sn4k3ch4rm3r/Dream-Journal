@@ -1,8 +1,8 @@
-import 'package:dream_journal/data/database_provider.dart';
-import 'package:dream_journal/models/dream.dart';
+import 'package:dream_journal/shared/utils/database_provider.dart';
+import 'package:dream_journal/shared/models/dream.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'dream_view.dart';
+import '../dream/dream_view.dart';
 
 class DreamList extends StatefulWidget {
   const DreamList({Key? key}) : super(key: key);

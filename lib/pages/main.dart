@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'analytics.dart';
-import 'dream_list.dart';
+import 'analytics/analytics_view.dart';
+import 'dream_list/dream_list_view.dart';
 
 class NavigationView extends StatefulWidget {
   const NavigationView({Key? key}) : super(key: key);

@@ -1,4 +1,4 @@
-import 'package:dream_journal/data/database_provider.dart';
+import 'package:dream_journal/shared/utils/database_provider.dart';
 import 'package:intl/intl.dart';
 
 class Dream {
