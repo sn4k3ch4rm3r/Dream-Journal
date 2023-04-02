@@ -12,9 +12,12 @@ class DreamList extends StatefulWidget {
 }
 
 class _DreamListState extends State<DreamList> {
+  UniqueKey _refreshKey = UniqueKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _refreshKey,
       appBar: AppBar(
         title: const Text('Dreams'),
       ),
@@ -29,7 +32,9 @@ class _DreamListState extends State<DreamList> {
             MaterialPageRoute(builder: (context) => const DreamView(isNew: true)),
           );
           if (result == 'success') {
-            setState(() {});
+            setState(() {
+              _refreshKey = UniqueKey();
+            });
           }
         },
       ),
