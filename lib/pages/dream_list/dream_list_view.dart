@@ -20,6 +20,13 @@ class _DreamListState extends State<DreamList> {
   bool _authenticated = false;
   bool _dreamsHidden = true;
   LocalAuthentication _auth = LocalAuthentication();
+  ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +72,7 @@ class _DreamListState extends State<DreamList> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return CustomScrollView(
+              controller: _scrollController,
               slivers: [
                 for (DateTime month in snapshot.data!.keys)
                   SliverStickyHeader(
@@ -92,20 +100,51 @@ class _DreamListState extends State<DreamList> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(
-          Icons.add,
-        ),
-        onPressed: () async {
-          var result = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const DreamView(isNew: true)),
+      floatingActionButton: AnimatedBuilder(
+        animation: _scrollController,
+        builder: (context, _) {
+          bool extended = !_scrollController.positions.isNotEmpty || _scrollController.position.pixels < 1;
+          return FloatingActionButton.extended(
+            label: AnimatedSwitcher(
+              duration: Duration(milliseconds: 200),
+              reverseDuration: Duration(milliseconds: 200),
+              switchInCurve: Curves.easeInOut,
+              switchOutCurve: Curves.easeInOut,
+              transitionBuilder: (child, animation) => FadeTransition(
+                opacity: animation,
+                child: SizeTransition(
+                  sizeFactor: animation,
+                  child: child,
+                  axis: Axis.horizontal,
+                ),
+              ),
+              child: extended
+                  ? Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: extended ? 16.0 : 0),
+                          child: const Icon(
+                            Icons.add,
+                          ),
+                        ),
+                        Text("Add Dream"),
+                      ],
+                    )
+                  : Icon(Icons.add),
+            ),
+            extendedPadding: EdgeInsets.only(left: 16, right: extended ? 20 : 16),
+            onPressed: () async {
+              var result = await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const DreamView(isNew: true)),
+              );
+              if (result == 'success') {
+                setState(() {
+                  _refreshKey = UniqueKey();
+                });
+              }
+            },
           );
-          if (result == 'success') {
-            setState(() {
-              _refreshKey = UniqueKey();
-            });
-          }
         },
       ),
     );
