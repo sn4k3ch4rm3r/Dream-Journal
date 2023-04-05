@@ -64,13 +64,35 @@ class DatabaseProvider {
 
   Future<List<Dream>> getDreams() async {
     final db = await database;
-    var dreams = await db.query(TABLE_DREAM);
+    var dreams = await db.query(
+      TABLE_DREAM,
+      orderBy: '$COLUMN_DATE DESC, $COLUMN_ID DESC',
+    );
 
     List<Dream> dreamList = [];
     for (var dream in dreams) {
       dreamList.add(Dream.fromMap(dream));
     }
     return dreamList;
+  }
+
+  Future<Map<DateTime, List<Dream>>> getDreamsByMonth() async {
+    List<Dream> dreams = await getDreams();
+    Map<DateTime, List<Dream>> months = {};
+
+    for (var dream in dreams) {
+      DateTime date = dream.date;
+      DateTime month = DateTime(date.year, date.month);
+      if (months.containsKey(month)) {
+        months[month]!.add(dream);
+      } else {
+        months[month] = [
+          dream
+        ];
+      }
+    }
+
+    return months;
   }
 
   Future<Dream> insert(Dream dream) async {

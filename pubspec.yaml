@@ -19,6 +19,7 @@ dependencies:
   path: ^1.8.2
   intl: ^0.18.0
   google_fonts: ^4.0.3
+  flutter_sticky_header: ^0.6.5
 
 dev_dependencies:
   flutter_test:
