@@ -27,6 +27,19 @@ class Dream {
     required this.date,
   });
 
+  Dream.copy(Dream dream) {
+    id = dream.id;
+    this.dream = dream.dream;
+    isNightmare = dream.isNightmare;
+    isRecurrent = dream.isRecurrent;
+    sleepParalysisOccured = dream.sleepParalysisOccured;
+    falseAwakeningOccured = dream.falseAwakeningOccured;
+    isLucid = dream.isLucid;
+    vividity = dream.vividity;
+    lucidity = dream.lucidity;
+    date = dream.date;
+  }
+
   Map<String, dynamic> toMap() {
     String dateString = dateFormat.format(date);
     Map<String, dynamic> map = {
