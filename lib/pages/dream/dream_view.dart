@@ -1,3 +1,6 @@
+import 'package:dream_journal/pages/dream/widgets/dream_description.dart';
+import 'package:dream_journal/pages/dream/widgets/property_slider.dart';
+import 'package:dream_journal/pages/dream/widgets/property_switch.dart';
 import 'package:dream_journal/shared/utils/database_provider.dart';
 import 'package:dream_journal/shared/models/dream.dart';
 import 'package:dream_journal/shared/widgets/dialogs.dart';
@@ -20,7 +23,7 @@ class _DreamViewState extends State<DreamView> {
   Dream? _dreamBackup;
 
   final TextEditingController _controller = TextEditingController();
-  final DateFormat _dateFormat = DateFormat('yyyy. MM. dd.');
+  final DateFormat _dateFormat = DateFormat('EEEE, MMMM d, yyyy');
 
   @override
   void initState() {
@@ -73,10 +76,7 @@ class _DreamViewState extends State<DreamView> {
           actions: _dream != null && !_editing
               ? <Widget>[
                   IconButton(
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).primaryIconTheme.color,
-                    ),
+                    icon: Icon(Icons.edit),
                     onPressed: () {
                       setState(() {
                         _editing = true;
@@ -85,13 +85,10 @@ class _DreamViewState extends State<DreamView> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Theme.of(context).primaryIconTheme.color,
-                    ),
+                    icon: Icon(Icons.delete),
                     onPressed: () {
                       Dialogs.deleteConfirmDialog(context).then((confirmed) {
-                        if (confirmed) {
+                        if (confirmed ?? false) {
                           DatabaseProvider.db.delete(_dream!);
                           Navigator.pop(context);
                         }
@@ -117,162 +114,97 @@ class _DreamViewState extends State<DreamView> {
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Column(
               children: <Widget>[
-                ElevatedButton(
+                FilledButton.tonalIcon(
                   onPressed: () {
                     if (_editing) {
                       showDatePicker(
                         context: context,
                         initialDate: _dream!.date,
-                        firstDate: DateTime.fromMillisecondsSinceEpoch(0),
+                        firstDate: DateTime.fromMicrosecondsSinceEpoch(0),
                         lastDate: DateTime.now(),
-                      ).then((value) => {
-                            if (value != null)
-                              setState(() {
-                                _dream!.date = value;
-                              })
+                      ).then((date) {
+                        if (date != null) {
+                          setState(() {
+                            _dream!.date = date;
                           });
+                        }
+                      });
                     }
                   },
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                    ),
-                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(20, 10, 20, 10)),
-                  ),
-                  child: Text(
+                  icon: Icon(Icons.event),
+                  label: Text(
                     _dateFormat.format(_dream!.date),
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSecondaryContainer),
+                  ),
+                  style: ButtonStyle(
+                    padding: MaterialStatePropertyAll(EdgeInsets.symmetric(vertical: 16, horizontal: 25)),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextField(
-                  controller: _controller,
+                const SizedBox(height: 20.0),
+                DreamDescription(
                   readOnly: !_editing,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  textInputAction: TextInputAction.done,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  decoration: InputDecoration(
-                    fillColor: Theme.of(context).colorScheme.surface,
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    hintText: 'Describe your dream in as much detail as you can',
+                  controller: _controller,
+                ),
+                const SizedBox(height: 20.0),
+                DreamPropertySwitch(
+                  title: 'Lucid Dream',
+                  value: _dream!.isLucid,
+                  readOnly: !_editing,
+                  onChanged: (value) => setState(() {
+                    _dream!.isLucid = value;
+                  }),
+                ),
+                DreamPropertySwitch(
+                  title: 'Nightmare',
+                  value: _dream!.isNightmare,
+                  readOnly: !_editing,
+                  onChanged: (value) => setState(() {
+                    _dream!.isNightmare = value;
+                  }),
+                ),
+                DreamPropertySwitch(
+                  title: 'Sleep Paralysis',
+                  value: _dream!.sleepParalysisOccured,
+                  readOnly: !_editing,
+                  onChanged: (value) => setState(() {
+                    _dream!.sleepParalysisOccured = value;
+                  }),
+                ),
+                DreamPropertySwitch(
+                  title: 'Recurrent Dream',
+                  value: _dream!.isRecurrent,
+                  readOnly: !_editing,
+                  onChanged: (value) => setState(() {
+                    _dream!.isRecurrent = value;
+                  }),
+                ),
+                DreamPropertySwitch(
+                  title: 'False Awakening',
+                  value: _dream!.falseAwakeningOccured,
+                  readOnly: !_editing,
+                  onChanged: (value) => setState(() {
+                    _dream!.falseAwakeningOccured = value;
+                  }),
+                ),
+                Divider(),
+                DreamPropertySlider(
+                  title: 'Clarity',
+                  value: _dream!.vividity,
+                  readOnly: !_editing,
+                  onChanged: (value) => setState(() {
+                    _dream!.vividity = value;
+                  }),
+                ),
+                if (_dream!.isLucid)
+                  DreamPropertySlider(
+                    title: 'Lucidity',
+                    value: _dream!.lucidity,
+                    readOnly: !_editing,
+                    onChanged: (value) => setState(() {
+                      _dream!.lucidity = value;
+                    }),
                   ),
-                  textCapitalization: TextCapitalization.sentences,
-                ),
-                Table(
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  columnWidths: const {
-                    1: FixedColumnWidth(55)
-                  },
-                  children: [
-                    TableRow(
-                      children: <Widget>[
-                        const Text('Lucid dream:'),
-                        Switch(
-                          value: _dream!.isLucid,
-                          onChanged: (value) {
-                            if (_editing) {
-                              setState(() {
-                                _dream!.isLucid = value;
-                              });
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: <Widget>[
-                        const Text('Nightmare:'),
-                        Switch(
-                          value: _dream!.isNightmare,
-                          onChanged: (value) {
-                            if (_editing) {
-                              setState(() {
-                                _dream!.isNightmare = value;
-                              });
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: <Widget>[
-                        const Text('Recurrent:'),
-                        Switch(
-                          value: _dream!.isRecurrent,
-                          onChanged: (value) {
-                            if (_editing) {
-                              setState(() {
-                                _dream!.isRecurrent = value;
-                              });
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: <Widget>[
-                        const Text('Sleep paralysis:'),
-                        Switch(
-                          value: _dream!.sleepParalysisOccured,
-                          onChanged: (value) {
-                            if (_editing) {
-                              setState(() {
-                                _dream!.sleepParalysisOccured = value;
-                              });
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: <Widget>[
-                        const Text('False awakening:'),
-                        Switch(
-                          value: _dream!.falseAwakeningOccured,
-                          onChanged: (value) {
-                            if (_editing) {
-                              setState(() {
-                                _dream!.falseAwakeningOccured = value;
-                              });
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Stack(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: Text('Vividity:'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 100.0),
-                      child: Slider(
-                        value: _dream!.vividity.toDouble(),
-                        min: 0,
-                        max: 10,
-                        divisions: 10,
-                        label: _dream!.vividity.toString(),
-                        onChanged: (value) {
-                          if (_editing) {
-                            setState(() {
-                              _dream!.vividity = value.toInt();
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                getLucidSlider(),
+                SizedBox(height: 50.0),
               ],
             ),
           ),
@@ -283,38 +215,6 @@ class _DreamViewState extends State<DreamView> {
 
   void setDreamValue() {
     _dream!.dream = _controller.text;
-  }
-
-  Widget getLucidSlider() {
-    if (_dream!.isLucid) {
-      return Stack(
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(top: 10.0),
-            child: Text('Lucidity:'),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 100.0),
-            child: Slider(
-              value: _dream!.lucidity.toDouble(),
-              min: 0,
-              max: 10,
-              divisions: 10,
-              label: _dream!.lucidity.toString(),
-              onChanged: (value) {
-                if (_editing) {
-                  setState(() {
-                    _dream!.lucidity = value.toInt();
-                  });
-                }
-              },
-            ),
-          ),
-        ],
-      );
-    } else {
-      return Container();
-    }
   }
 
   void saveDream() {
