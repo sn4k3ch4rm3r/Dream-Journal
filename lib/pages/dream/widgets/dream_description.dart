@@ -24,7 +24,6 @@ class DreamDescription extends StatelessWidget {
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           alignLabelWithHint: true,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(conrerRadius)),
           labelText: 'Dream Description',
         ),
         textCapitalization: TextCapitalization.sentences,

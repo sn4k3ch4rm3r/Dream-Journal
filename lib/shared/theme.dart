@@ -16,6 +16,11 @@ class DynamicTheme {
           color: colorScheme.onSurface,
         ),
       ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
     );
   }
 }

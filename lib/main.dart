@@ -1,5 +1,5 @@
 import 'package:dream_journal/pages/main.dart';
-import 'package:dream_journal/shared/utils/theme.dart';
+import 'package:dream_journal/shared/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/services.dart';

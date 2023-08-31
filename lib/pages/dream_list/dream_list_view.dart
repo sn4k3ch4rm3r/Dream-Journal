@@ -1,6 +1,6 @@
 import 'package:dream_journal/pages/dream_list/widgets/list_dream.dart';
 import 'package:dream_journal/pages/dream_list/widgets/list_month.dart';
-import 'package:dream_journal/shared/utils/database_provider.dart';
+import 'package:dream_journal/shared/database_provider.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:dream_journal/shared/models/dream.dart';
 import 'package:flutter/material.dart';

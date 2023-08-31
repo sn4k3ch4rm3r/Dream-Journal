@@ -1,4 +1,7 @@
-import 'package:dream_journal/shared/utils/database_provider.dart';
+import 'package:dream_journal/shared/database_provider.dart';
+import 'package:dream_journal/shared/models/mood.dart';
+import 'package:dream_journal/shared/models/tag.dart';
+import 'package:dream_journal/shared/models/time_of_day.dart';
 import 'package:intl/intl.dart';
 
 class Dream {
@@ -13,6 +16,9 @@ class Dream {
   late int vividity;
   late int lucidity;
   late DateTime date;
+  Mood? mood;
+  TimeOfDayEnum? time;
+  List<Tag> tags = [];
 
   Dream({
     this.id,
@@ -25,6 +31,8 @@ class Dream {
     required this.vividity,
     required this.lucidity,
     required this.date,
+    this.mood,
+    this.time,
   });
 
   Dream.copy(Dream dream) {
@@ -38,6 +46,9 @@ class Dream {
     vividity = dream.vividity;
     lucidity = dream.lucidity;
     date = dream.date;
+    mood = dream.mood;
+    time = dream.time;
+    tags = dream.tags.map((e) => Tag.copy(e)).toList();
   }
 
   Map<String, dynamic> toMap() {
