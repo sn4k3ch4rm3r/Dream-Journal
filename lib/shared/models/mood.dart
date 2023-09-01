@@ -1,5 +1,5 @@
 enum Mood {
-  BAD,
-  NEUTRAL,
-  GOOD
+  bad,
+  neutral,
+  good;
 }

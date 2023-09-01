@@ -21,7 +21,7 @@ class DreamDescription extends StatelessWidget {
         minLines: 4,
         textInputAction: TextInputAction.done,
         style: Theme.of(context).textTheme.bodyLarge,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           alignLabelWithHint: true,
           labelText: 'Dream Description',

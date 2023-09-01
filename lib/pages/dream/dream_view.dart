@@ -3,6 +3,7 @@ import 'package:dream_journal/pages/dream/widgets/property_multiselect.dart';
 import 'package:dream_journal/pages/dream/widgets/property_slider.dart';
 import 'package:dream_journal/pages/dream/widgets/property_switch.dart';
 import 'package:dream_journal/shared/database_provider.dart';
+import 'package:dream_journal/shared/firestore_manager.dart';
 import 'package:dream_journal/shared/models/dream.dart';
 import 'package:dream_journal/shared/models/mood.dart';
 import 'package:dream_journal/shared/models/time_of_day.dart';
@@ -26,10 +27,7 @@ class _DreamViewState extends State<DreamView> {
   Dream? _dream;
   Dream? _dreamBackup;
 
-  List<Tag> _allTags = [
-    Tag('Schönherz', TagType.PLACE),
-    Tag('Szepesi Niki', TagType.PERSON),
-  ];
+  List<Tag> _allTags = [];
 
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _tagController = TextEditingController();
@@ -41,6 +39,7 @@ class _DreamViewState extends State<DreamView> {
     _descriptionController.addListener(setDreamValue);
     _dream = widget.dream == null ? null : Dream.copy(widget.dream!);
     _editing = widget.isNew;
+    FirestoreManager.getTags().then((value) => _allTags = value);
   }
 
   @override
@@ -62,14 +61,20 @@ class _DreamViewState extends State<DreamView> {
 
     List<Widget> actions = [
       IconButton(
-        icon: Icon(Icons.favorite_border),
-        onPressed: () {},
+        icon: Icon(_dream!.favourite ? Icons.favorite : Icons.favorite_border),
+        onPressed: () {
+          if (_editing) {
+            setState(() {
+              _dream!.favourite = !_dream!.favourite;
+            });
+          }
+        },
       ),
     ];
     if (_dream != null && !_editing) {
       actions.addAll([
         IconButton(
-          icon: Icon(Icons.edit),
+          icon: const Icon(Icons.edit),
           onPressed: () {
             setState(() {
               _editing = true;
@@ -78,11 +83,11 @@ class _DreamViewState extends State<DreamView> {
           },
         ),
         IconButton(
-          icon: Icon(Icons.delete),
+          icon: const Icon(Icons.delete),
           onPressed: () {
             Dialogs.deleteConfirmDialog(context).then((confirmed) {
               if (confirmed ?? false) {
-                DatabaseProvider.db.delete(_dream!);
+                FirestoreManager.deleteDream(_dream!.firebaseId!);
                 Navigator.pop(context);
               }
             });
@@ -94,10 +99,13 @@ class _DreamViewState extends State<DreamView> {
         IconButton(
           icon: const Icon(Icons.check),
           onPressed: () {
+            FirestoreManager.saveDream(_dream!);
             if (widget.isNew) {
-              saveDream();
+              Navigator.pop(context, 'success');
             } else {
-              updateDream();
+              setState(() {
+                _editing = false;
+              });
             }
           },
         ),
@@ -105,7 +113,7 @@ class _DreamViewState extends State<DreamView> {
     }
 
     //All tags except the selected ones
-    List<DropdownMenuEntry<Tag>> menuItems = _allTags.where((tag) => !_dream!.tags.contains(tag)).map((tag) => tag.toMenuEntry()).toList();
+    List<DropdownMenuEntry<Tag>> menuItems = _allTags.where((element) => !_dream!.tags.map((e) => e.name).toList().contains(element.name)).map((tag) => tag.toMenuEntry()).toList();
     List<Widget> chips = _dream!.tags
         .map(
           (tag) => tag.toChip(
@@ -170,12 +178,12 @@ class _DreamViewState extends State<DreamView> {
                         });
                       }
                     },
-                    icon: Icon(Icons.event),
+                    icon: const Icon(Icons.event),
                     label: Text(
                       _dateFormat.format(_dream!.date),
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSecondaryContainer),
                     ),
-                    style: ButtonStyle(
+                    style: const ButtonStyle(
                       padding: MaterialStatePropertyAll(EdgeInsets.symmetric(vertical: 16, horizontal: 25)),
                     ),
                   ),
@@ -193,12 +201,12 @@ class _DreamViewState extends State<DreamView> {
                       children: chips,
                     ),
                   ),
-                  if (_editing) SizedBox(height: 10.0),
+                  if (_editing) const SizedBox(height: 10.0),
                   if (_editing)
                     DropdownMenu<Tag>(
                       width: MediaQuery.of(context).size.width - 32.0,
                       inputDecorationTheme: Theme.of(context).inputDecorationTheme,
-                      trailingIcon: Icon(Icons.add),
+                      trailingIcon: const Icon(Icons.add),
                       controller: _tagController,
                       label: const Text('Tags'),
                       dropdownMenuEntries: menuItems,
@@ -224,7 +232,7 @@ class _DreamViewState extends State<DreamView> {
                       },
                     ),
                   const SizedBox(height: 15.0),
-                  Divider(),
+                  const Divider(),
                   DreamPropertySwitch(
                     title: 'Lucid Dream',
                     value: _dream!.isLucid,
@@ -265,7 +273,7 @@ class _DreamViewState extends State<DreamView> {
                       _dream!.falseAwakeningOccured = value;
                     }),
                   ),
-                  Divider(),
+                  const Divider(),
                   DreamPropertySlider(
                     title: 'Clarity',
                     value: _dream!.vividity,
@@ -283,22 +291,22 @@ class _DreamViewState extends State<DreamView> {
                         _dream!.lucidity = value;
                       }),
                     ),
-                  SizedBox(height: 16.0),
-                  Divider(),
+                  const SizedBox(height: 16.0),
+                  const Divider(),
                   DreamPropertyMultiselect(
                     title: 'Time of day',
                     onChanged: (value) => setState(() {
                       _dream!.time = value.firstOrNull;
                     }),
                     readOnly: !_editing,
-                    segments: [
+                    segments: const [
                       ButtonSegment(
-                        value: TimeOfDayEnum.NIGHT,
+                        value: TimeOfDayEnum.night,
                         label: Text('Night'),
                         icon: Icon(Icons.nights_stay),
                       ),
                       ButtonSegment(
-                        value: TimeOfDayEnum.DAY,
+                        value: TimeOfDayEnum.day,
                         label: Text('Day'),
                         icon: Icon(Icons.wb_sunny),
                       ),
@@ -311,26 +319,26 @@ class _DreamViewState extends State<DreamView> {
                       _dream!.mood = value.firstOrNull;
                     }),
                     readOnly: !_editing,
-                    segments: [
+                    segments: const [
                       ButtonSegment(
-                        value: Mood.BAD,
+                        value: Mood.bad,
                         icon: Text('😞'),
                         label: Text('Bad'),
                       ),
                       ButtonSegment(
-                        value: Mood.NEUTRAL,
+                        value: Mood.neutral,
                         icon: Text('😐'),
                         label: Text('Neutral'),
                       ),
                       ButtonSegment(
-                        value: Mood.GOOD,
+                        value: Mood.good,
                         icon: Text('🙂'),
                         label: Text('Good'),
                       ),
                     ],
                     selected: _dream!.mood,
                   ),
-                  SizedBox(height: 50.0),
+                  const SizedBox(height: 50.0),
                 ],
               ),
             ),

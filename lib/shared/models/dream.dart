@@ -1,12 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dream_journal/shared/database_provider.dart';
 import 'package:dream_journal/shared/models/mood.dart';
 import 'package:dream_journal/shared/models/tag.dart';
 import 'package:dream_journal/shared/models/time_of_day.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class Dream {
   static DateFormat dateFormat = DateFormat('yyyy-MM-dd');
   late int? id;
+  String? firebaseId;
   late String? dream;
   late bool isNightmare;
   late bool isRecurrent;
@@ -16,12 +19,14 @@ class Dream {
   late int vividity;
   late int lucidity;
   late DateTime date;
+  bool favourite = false;
   Mood? mood;
   TimeOfDayEnum? time;
   List<Tag> tags = [];
 
   Dream({
     this.id,
+    this.firebaseId,
     this.dream,
     required this.isNightmare,
     required this.isRecurrent,
@@ -33,10 +38,13 @@ class Dream {
     required this.date,
     this.mood,
     this.time,
-  });
+    this.favourite = false,
+    tags,
+  }) : tags = tags ?? [];
 
   Dream.copy(Dream dream) {
     id = dream.id;
+    firebaseId = dream.firebaseId;
     this.dream = dream.dream;
     isNightmare = dream.isNightmare;
     isRecurrent = dream.isRecurrent;
@@ -46,6 +54,7 @@ class Dream {
     vividity = dream.vividity;
     lucidity = dream.lucidity;
     date = dream.date;
+    favourite = dream.favourite;
     mood = dream.mood;
     time = dream.time;
     tags = dream.tags.map((e) => Tag.copy(e)).toList();
@@ -63,6 +72,7 @@ class Dream {
       DatabaseProvider.COLUMN_VIVIDITY: vividity,
       DatabaseProvider.COLUMN_LUCIDITY: lucidity,
       DatabaseProvider.COLUMN_DATE: dateString,
+      DatabaseProvider.COLUMN_FIREBASE_ID: firebaseId,
     };
     if (id != null) {
       map[DatabaseProvider.COLUMN_ID] = id;
@@ -83,5 +93,6 @@ class Dream {
     lucidity = map[DatabaseProvider.COLUMN_LUCIDITY];
     String dateString = map[DatabaseProvider.COLUMN_DATE];
     date = dateFormat.parse(dateString);
+    firebaseId = map[DatabaseProvider.COLUMN_FIREBASE_ID];
   }
 }

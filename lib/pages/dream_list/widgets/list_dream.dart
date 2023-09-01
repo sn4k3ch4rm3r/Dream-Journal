@@ -16,7 +16,7 @@ class DreamListElement extends StatelessWidget {
     return OpenContainer(
       openColor: Theme.of(context).colorScheme.surface,
       closedColor: Theme.of(context).colorScheme.surface,
-      transitionDuration: Duration(milliseconds: 400),
+      transitionDuration: const Duration(milliseconds: 400),
       onClosed: (String? data) {
         onChanged();
       },

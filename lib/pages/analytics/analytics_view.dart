@@ -1,4 +1,5 @@
 import 'package:dream_journal/shared/database_provider.dart';
+import 'package:dream_journal/shared/firestore_manager.dart';
 import 'package:dream_journal/shared/models/statisticsdata.dart';
 import 'package:flutter/material.dart';
 import 'package:dream_journal/shared/models/dream.dart';
@@ -13,7 +14,7 @@ class AnalyticsView extends StatefulWidget {
 
 class _AnalyticsViewState extends State<AnalyticsView> {
   Future<StatisticsData> getData() async {
-    List<Dream> dreams = await DatabaseProvider.db.getDreams();
+    List<Dream> dreams = await FirestoreManager.getDreams();
     int count = dreams.length;
     List<Dream> lucidDreams = dreams.where((element) => element.isLucid).toList();
     return StatisticsData(

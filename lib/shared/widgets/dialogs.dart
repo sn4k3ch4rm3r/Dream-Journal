@@ -32,7 +32,7 @@ class Dialogs {
 
   static Future<dynamic> newTagDialog(BuildContext context, {required String name}) {
     TextEditingController controller = TextEditingController(text: name);
-    TagType type = TagType.TAG;
+    TagType type = TagType.tag;
     return showDialog(
       context: context,
       builder: (context) {
@@ -44,14 +44,14 @@ class Dialogs {
             child: Column(
               children: [
                 TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Name',
                   ),
                   controller: controller,
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 DropdownButtonFormField<TagType>(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Type',
                   ),
                   value: type,
@@ -60,9 +60,9 @@ class Dialogs {
                       type = value;
                     }
                   },
-                  items: [
+                  items: const [
                     DropdownMenuItem<TagType>(
-                      value: TagType.TAG,
+                      value: TagType.tag,
                       child: Row(
                         children: [
                           Icon(Icons.tag),
@@ -72,7 +72,7 @@ class Dialogs {
                       ),
                     ),
                     DropdownMenuItem<TagType>(
-                      value: TagType.PERSON,
+                      value: TagType.person,
                       child: Row(
                         children: [
                           Icon(Icons.person),
@@ -82,7 +82,7 @@ class Dialogs {
                       ),
                     ),
                     DropdownMenuItem<TagType>(
-                      value: TagType.PLACE,
+                      value: TagType.place,
                       child: Row(
                         children: [
                           Icon(Icons.place),

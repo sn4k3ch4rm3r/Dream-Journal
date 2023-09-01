@@ -23,7 +23,7 @@ class DreamPropertyMultiselect<T> extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),
-          Container(
+          SizedBox(
             width: double.infinity,
             child: SegmentedButton(
                 segments: segments,

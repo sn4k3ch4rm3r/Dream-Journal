@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 enum TagType {
-  PLACE,
-  PERSON,
-  TAG,
+  place,
+  person,
+  tag,
 }
 
 class Tag {
@@ -20,10 +20,10 @@ class Tag {
   IconData get iconData {
     IconData icon;
     switch (type) {
-      case TagType.PLACE:
+      case TagType.place:
         icon = Icons.place;
         break;
-      case TagType.PERSON:
+      case TagType.person:
         icon = Icons.person;
         break;
       default:

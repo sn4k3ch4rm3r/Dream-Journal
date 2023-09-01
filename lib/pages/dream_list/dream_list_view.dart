@@ -1,6 +1,8 @@
 import 'package:dream_journal/pages/dream_list/widgets/list_dream.dart';
 import 'package:dream_journal/pages/dream_list/widgets/list_month.dart';
 import 'package:dream_journal/shared/database_provider.dart';
+import 'package:dream_journal/shared/firestore_manager.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:dream_journal/shared/models/dream.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +20,9 @@ class DreamList extends StatefulWidget {
 class _DreamListState extends State<DreamList> {
   UniqueKey _refreshKey = UniqueKey();
   bool _authenticated = false;
-  bool _dreamsHidden = true;
-  LocalAuthentication _auth = LocalAuthentication();
-  ScrollController _scrollController = ScrollController();
+  bool _dreamsHidden = true && !kIsWeb;
+  final LocalAuthentication _auth = LocalAuthentication();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
@@ -41,11 +43,11 @@ class _DreamListState extends State<DreamList> {
               if (!_authenticated) {
                 bool result = await _auth.authenticate(
                   localizedReason: ' ',
-                  options: AuthenticationOptions(
+                  options: const AuthenticationOptions(
                     stickyAuth: true,
                   ),
                   authMessages: [
-                    AndroidAuthMessages(
+                    const AndroidAuthMessages(
                       signInTitle: 'Authenticate to view dreams',
                       biometricHint: '',
                     ),
@@ -68,7 +70,7 @@ class _DreamListState extends State<DreamList> {
         ],
       ),
       body: FutureBuilder(
-        future: DatabaseProvider.db.getDreamsByMonth(),
+        future: FirestoreManager.getDreamsByMonth(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return CustomScrollView(
@@ -106,16 +108,16 @@ class _DreamListState extends State<DreamList> {
           bool extended = !_scrollController.positions.isNotEmpty || _scrollController.position.pixels < 1;
           return FloatingActionButton.extended(
             label: AnimatedSwitcher(
-              duration: Duration(milliseconds: 200),
-              reverseDuration: Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 200),
+              reverseDuration: const Duration(milliseconds: 200),
               switchInCurve: Curves.easeInOut,
               switchOutCurve: Curves.easeInOut,
               transitionBuilder: (child, animation) => FadeTransition(
                 opacity: animation,
                 child: SizeTransition(
                   sizeFactor: animation,
-                  child: child,
                   axis: Axis.horizontal,
+                  child: child,
                 ),
               ),
               child: extended
@@ -127,10 +129,10 @@ class _DreamListState extends State<DreamList> {
                             Icons.add,
                           ),
                         ),
-                        Text("Add Dream"),
+                        const Text("Add Dream"),
                       ],
                     )
-                  : Icon(Icons.add),
+                  : const Icon(Icons.add),
             ),
             extendedPadding: EdgeInsets.only(left: 16, right: extended ? 20 : 16),
             onPressed: () async {

@@ -16,6 +16,7 @@ class DatabaseProvider {
   static const String COLUMN_FALSEAWAKENING = 'falseawakening';
   static const String COLUMN_VIVIDITY = 'vividity';
   static const String COLUMN_LUCIDITY = 'lucidity';
+  static const String COLUMN_FIREBASE_ID = 'firebaseId';
 
   DatabaseProvider._();
   static final DatabaseProvider db = DatabaseProvider._();
@@ -33,7 +34,8 @@ class DatabaseProvider {
         '$COLUMN_SLEEPPARALYSIS INTEGER,'
         '$COLUMN_FALSEAWAKENING INTEGER,'
         '$COLUMN_VIVIDITY INTEGER,'
-        '$COLUMN_LUCIDITY INTEGER'
+        '$COLUMN_LUCIDITY INTEGER,'
+        '$COLUMN_FIREBASE_ID TEXT'
         ');');
   }
 
@@ -51,13 +53,14 @@ class DatabaseProvider {
 
     return await openDatabase(
       join(dbPath, 'dreams.db'),
-      version: 2,
+      version: 3,
       onCreate: (db, version) async {
         await _onCreate(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        await db.execute('DROP TABLE $TABLE_DREAM');
-        await _onCreate(db);
+        if (oldVersion == 2 && newVersion == 3) {
+          await db.execute('ALTER TABLE $TABLE_DREAM ADD COLUMN firebaseId TEXT;');
+        }
       },
     );
   }
@@ -67,6 +70,7 @@ class DatabaseProvider {
     var dreams = await db.query(
       TABLE_DREAM,
       orderBy: '$COLUMN_DATE DESC, $COLUMN_ID DESC',
+      where: '$COLUMN_FIREBASE_ID IS NULL',
     );
 
     List<Dream> dreamList = [];
