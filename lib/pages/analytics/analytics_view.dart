@@ -1,4 +1,3 @@
-import 'package:dream_journal/shared/database_provider.dart';
 import 'package:dream_journal/shared/firestore_manager.dart';
 import 'package:dream_journal/shared/models/statisticsdata.dart';
 import 'package:flutter/material.dart';
