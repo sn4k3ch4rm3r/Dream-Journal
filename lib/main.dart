@@ -30,14 +30,6 @@ void main() async {
     }
   }
 
-  if (!kIsWeb && Platform.isAndroid) {
-    List<Dream> oldDreams = await DatabaseProvider.db.getDreams();
-    for (Dream dream in oldDreams) {
-      await FirestoreManager.saveDream(dream);
-      await DatabaseProvider.db.update(dream);
-    }
-  }
-
   runApp(const DreamJournal());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(

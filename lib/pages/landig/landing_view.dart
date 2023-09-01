@@ -1,5 +1,9 @@
 import 'dart:io';
 
+import 'package:dream_journal/pages/main.dart';
+import 'package:dream_journal/shared/database_provider.dart';
+import 'package:dream_journal/shared/firestore_manager.dart';
+import 'package:dream_journal/shared/models/dream.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +20,9 @@ class LandingView extends StatefulWidget {
 class _LandingViewState extends State<LandingView> {
   @override
   Widget build(BuildContext context) {
+    if (FirebaseAuth.instance.currentUser != null) {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const NavigationView()));
+    }
     return Scaffold(
       body: Center(
         child: Padding(
@@ -40,8 +47,18 @@ class _LandingViewState extends State<LandingView> {
                       idToken: googleAuth.idToken,
                     );
                     await FirebaseAuth.instance.signInWithCredential(credential);
+                    if (FirebaseAuth.instance.currentUser != null) {
+                      List<Dream> oldDreams = await DatabaseProvider.db.getDreams();
+                      for (Dream dream in oldDreams) {
+                        await FirestoreManager.saveDream(dream);
+                        await DatabaseProvider.db.update(dream);
+                      }
+                    }
                   } else {
                     await FirebaseAuth.instance.signInWithPopup(GoogleAuthProvider());
+                  }
+                  if (FirebaseAuth.instance.currentUser != null) {
+                    setState(() {});
                   }
                 },
                 shape: RoundedRectangleBorder(
