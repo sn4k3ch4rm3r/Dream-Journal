@@ -158,189 +158,187 @@ class _DreamViewState extends State<DreamView> {
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Expanded(
-              child: Column(
-                children: <Widget>[
-                  FilledButton.tonalIcon(
-                    onPressed: () {
-                      if (_editing) {
-                        showDatePicker(
-                          context: context,
-                          initialDate: _dream!.date,
-                          firstDate: DateTime.fromMicrosecondsSinceEpoch(0),
-                          lastDate: DateTime.now(),
-                        ).then((date) {
-                          if (date != null) {
-                            setState(() {
-                              _dream!.date = date;
-                            });
-                          }
-                        });
-                      }
-                    },
-                    icon: const Icon(Icons.event),
-                    label: Text(
-                      _dateFormat.format(_dream!.date),
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSecondaryContainer),
-                    ),
-                    style: const ButtonStyle(
-                      padding: MaterialStatePropertyAll(EdgeInsets.symmetric(vertical: 16, horizontal: 25)),
-                    ),
-                  ),
-                  const SizedBox(height: 20.0),
-                  DreamDescription(
-                    readOnly: !_editing,
-                    controller: _descriptionController,
-                  ),
-                  const SizedBox(height: 15.0),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Wrap(
-                      spacing: 8.0, // Set the spacing between the chips
-                      alignment: WrapAlignment.start,
-                      children: chips,
-                    ),
-                  ),
-                  if (_editing) const SizedBox(height: 10.0),
-                  if (_editing)
-                    DropdownMenu<Tag>(
-                      width: MediaQuery.of(context).size.width - 32.0,
-                      inputDecorationTheme: Theme.of(context).inputDecorationTheme,
-                      trailingIcon: const Icon(Icons.add),
-                      controller: _tagController,
-                      label: const Text('Tags'),
-                      dropdownMenuEntries: menuItems,
-                      enableSearch: false,
-                      enableFilter: true,
-                      requestFocusOnTap: true,
-                      onSelected: (value) async {
-                        Tag? tag = value;
-                        if (value == null) {
-                          FocusScope.of(context).unfocus();
-                          Tag? newTag = await Dialogs.newTagDialog(context, name: _tagController.text);
-                          if (newTag != null) {
-                            tag = newTag;
-                            _allTags.add(tag);
-                          } else {
-                            _tagController.clear();
-                            return;
-                          }
+            child: Column(
+              children: <Widget>[
+                FilledButton.tonalIcon(
+                  onPressed: () {
+                    if (_editing) {
+                      showDatePicker(
+                        context: context,
+                        initialDate: _dream!.date,
+                        firstDate: DateTime.fromMicrosecondsSinceEpoch(0),
+                        lastDate: DateTime.now(),
+                      ).then((date) {
+                        if (date != null) {
+                          setState(() {
+                            _dream!.date = date;
+                          });
                         }
-                        _dream!.tags.add(tag!);
-                        _tagController.clear();
-                        setState(() {});
-                      },
-                    ),
-                  const SizedBox(height: 15.0),
-                  const Divider(),
-                  DreamPropertySwitch(
-                    title: 'Lucid Dream',
-                    value: _dream!.isLucid,
-                    readOnly: !_editing,
-                    onChanged: (value) => setState(() {
-                      _dream!.isLucid = value;
-                    }),
+                      });
+                    }
+                  },
+                  icon: const Icon(Icons.event),
+                  label: Text(
+                    _dateFormat.format(_dream!.date),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSecondaryContainer),
                   ),
-                  DreamPropertySwitch(
-                    title: 'Nightmare',
-                    value: _dream!.isNightmare,
-                    readOnly: !_editing,
-                    onChanged: (value) => setState(() {
-                      _dream!.isNightmare = value;
-                    }),
+                  style: const ButtonStyle(
+                    padding: MaterialStatePropertyAll(EdgeInsets.symmetric(vertical: 16, horizontal: 25)),
                   ),
-                  DreamPropertySwitch(
-                    title: 'Sleep Paralysis',
-                    value: _dream!.sleepParalysisOccured,
-                    readOnly: !_editing,
-                    onChanged: (value) => setState(() {
-                      _dream!.sleepParalysisOccured = value;
-                    }),
+                ),
+                const SizedBox(height: 20.0),
+                DreamDescription(
+                  readOnly: !_editing,
+                  controller: _descriptionController,
+                ),
+                const SizedBox(height: 15.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: Wrap(
+                    spacing: 8.0, // Set the spacing between the chips
+                    alignment: WrapAlignment.start,
+                    children: chips,
                   ),
-                  DreamPropertySwitch(
-                    title: 'Recurrent Dream',
-                    value: _dream!.isRecurrent,
-                    readOnly: !_editing,
-                    onChanged: (value) => setState(() {
-                      _dream!.isRecurrent = value;
-                    }),
+                ),
+                if (_editing) const SizedBox(height: 10.0),
+                if (_editing)
+                  DropdownMenu<Tag>(
+                    width: MediaQuery.of(context).size.width - 32.0,
+                    inputDecorationTheme: Theme.of(context).inputDecorationTheme,
+                    trailingIcon: const Icon(Icons.add),
+                    controller: _tagController,
+                    label: const Text('Tags'),
+                    dropdownMenuEntries: menuItems,
+                    enableSearch: false,
+                    enableFilter: true,
+                    requestFocusOnTap: true,
+                    onSelected: (value) async {
+                      Tag? tag = value;
+                      if (value == null) {
+                        FocusScope.of(context).unfocus();
+                        Tag? newTag = await Dialogs.newTagDialog(context, name: _tagController.text);
+                        if (newTag != null) {
+                          tag = newTag;
+                          _allTags.add(tag);
+                        } else {
+                          _tagController.clear();
+                          return;
+                        }
+                      }
+                      _dream!.tags.add(tag!);
+                      _tagController.clear();
+                      setState(() {});
+                    },
                   ),
-                  DreamPropertySwitch(
-                    title: 'False Awakening',
-                    value: _dream!.falseAwakeningOccured,
-                    readOnly: !_editing,
-                    onChanged: (value) => setState(() {
-                      _dream!.falseAwakeningOccured = value;
-                    }),
-                  ),
-                  const Divider(),
+                const SizedBox(height: 15.0),
+                const Divider(),
+                DreamPropertySwitch(
+                  title: 'Lucid Dream',
+                  value: _dream!.isLucid,
+                  readOnly: !_editing,
+                  onChanged: (value) => setState(() {
+                    _dream!.isLucid = value;
+                  }),
+                ),
+                DreamPropertySwitch(
+                  title: 'Nightmare',
+                  value: _dream!.isNightmare,
+                  readOnly: !_editing,
+                  onChanged: (value) => setState(() {
+                    _dream!.isNightmare = value;
+                  }),
+                ),
+                DreamPropertySwitch(
+                  title: 'Sleep Paralysis',
+                  value: _dream!.sleepParalysisOccured,
+                  readOnly: !_editing,
+                  onChanged: (value) => setState(() {
+                    _dream!.sleepParalysisOccured = value;
+                  }),
+                ),
+                DreamPropertySwitch(
+                  title: 'Recurrent Dream',
+                  value: _dream!.isRecurrent,
+                  readOnly: !_editing,
+                  onChanged: (value) => setState(() {
+                    _dream!.isRecurrent = value;
+                  }),
+                ),
+                DreamPropertySwitch(
+                  title: 'False Awakening',
+                  value: _dream!.falseAwakeningOccured,
+                  readOnly: !_editing,
+                  onChanged: (value) => setState(() {
+                    _dream!.falseAwakeningOccured = value;
+                  }),
+                ),
+                const Divider(),
+                DreamPropertySlider(
+                  title: 'Clarity',
+                  value: _dream!.vividity,
+                  readOnly: !_editing,
+                  onChanged: (value) => setState(() {
+                    _dream!.vividity = value;
+                  }),
+                ),
+                if (_dream!.isLucid)
                   DreamPropertySlider(
-                    title: 'Clarity',
-                    value: _dream!.vividity,
+                    title: 'Lucidity',
+                    value: _dream!.lucidity,
                     readOnly: !_editing,
                     onChanged: (value) => setState(() {
-                      _dream!.vividity = value;
+                      _dream!.lucidity = value;
                     }),
                   ),
-                  if (_dream!.isLucid)
-                    DreamPropertySlider(
-                      title: 'Lucidity',
-                      value: _dream!.lucidity,
-                      readOnly: !_editing,
-                      onChanged: (value) => setState(() {
-                        _dream!.lucidity = value;
-                      }),
+                const SizedBox(height: 16.0),
+                const Divider(),
+                DreamPropertyMultiselect(
+                  title: 'Time of day',
+                  onChanged: (value) => setState(() {
+                    _dream!.time = value.firstOrNull;
+                  }),
+                  readOnly: !_editing,
+                  segments: const [
+                    ButtonSegment(
+                      value: TimeOfDayEnum.night,
+                      label: Text('Night'),
+                      icon: Icon(Icons.nights_stay),
                     ),
-                  const SizedBox(height: 16.0),
-                  const Divider(),
-                  DreamPropertyMultiselect(
-                    title: 'Time of day',
-                    onChanged: (value) => setState(() {
-                      _dream!.time = value.firstOrNull;
-                    }),
-                    readOnly: !_editing,
-                    segments: const [
-                      ButtonSegment(
-                        value: TimeOfDayEnum.night,
-                        label: Text('Night'),
-                        icon: Icon(Icons.nights_stay),
-                      ),
-                      ButtonSegment(
-                        value: TimeOfDayEnum.day,
-                        label: Text('Day'),
-                        icon: Icon(Icons.wb_sunny),
-                      ),
-                    ],
-                    selected: _dream!.time,
-                  ),
-                  DreamPropertyMultiselect(
-                    title: 'Mood',
-                    onChanged: (value) => setState(() {
-                      _dream!.mood = value.firstOrNull;
-                    }),
-                    readOnly: !_editing,
-                    segments: const [
-                      ButtonSegment(
-                        value: Mood.bad,
-                        icon: Text('😞'),
-                        label: Text('Bad'),
-                      ),
-                      ButtonSegment(
-                        value: Mood.neutral,
-                        icon: Text('😐'),
-                        label: Text('Neutral'),
-                      ),
-                      ButtonSegment(
-                        value: Mood.good,
-                        icon: Text('🙂'),
-                        label: Text('Good'),
-                      ),
-                    ],
-                    selected: _dream!.mood,
-                  ),
-                  const SizedBox(height: 50.0),
-                ],
-              ),
+                    ButtonSegment(
+                      value: TimeOfDayEnum.day,
+                      label: Text('Day'),
+                      icon: Icon(Icons.wb_sunny),
+                    ),
+                  ],
+                  selected: _dream!.time,
+                ),
+                DreamPropertyMultiselect(
+                  title: 'Mood',
+                  onChanged: (value) => setState(() {
+                    _dream!.mood = value.firstOrNull;
+                  }),
+                  readOnly: !_editing,
+                  segments: const [
+                    ButtonSegment(
+                      value: Mood.bad,
+                      icon: Text('😞'),
+                      label: Text('Bad'),
+                    ),
+                    ButtonSegment(
+                      value: Mood.neutral,
+                      icon: Text('😐'),
+                      label: Text('Neutral'),
+                    ),
+                    ButtonSegment(
+                      value: Mood.good,
+                      icon: Text('🙂'),
+                      label: Text('Good'),
+                    ),
+                  ],
+                  selected: _dream!.mood,
+                ),
+                const SizedBox(height: 50.0),
+              ],
             ),
           ),
         ),

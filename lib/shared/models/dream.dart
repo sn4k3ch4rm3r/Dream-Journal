@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dream_journal/shared/database_provider.dart';
 import 'package:dream_journal/shared/models/mood.dart';
 import 'package:dream_journal/shared/models/tag.dart';
 import 'package:dream_journal/shared/models/time_of_day.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class Dream {

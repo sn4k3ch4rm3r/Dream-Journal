@@ -1,12 +1,7 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dream_journal/firebase_options.dart';
 import 'package:dream_journal/pages/landig/landing_view.dart';
 import 'package:dream_journal/pages/main.dart';
-import 'package:dream_journal/shared/database_provider.dart';
-import 'package:dream_journal/shared/firestore_manager.dart';
-import 'package:dream_journal/shared/models/dream.dart';
 import 'package:dream_journal/shared/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';

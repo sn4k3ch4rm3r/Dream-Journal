@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:dream_journal/pages/main.dart';
 import 'package:dream_journal/shared/database_provider.dart';
 import 'package:dream_journal/shared/firestore_manager.dart';
 import 'package:dream_journal/shared/models/dream.dart';
@@ -20,9 +18,6 @@ class LandingView extends StatefulWidget {
 class _LandingViewState extends State<LandingView> {
   @override
   Widget build(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser != null) {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const NavigationView()));
-    }
     return Scaffold(
       body: Center(
         child: Padding(
